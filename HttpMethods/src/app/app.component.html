@@ -2,23 +2,26 @@
   <div class="content-area">
     <div class="header">
       <h1>Manage Products</h1>
-      <hr>
+      <hr />
     </div>
     <div class="container">
       <!--Add product form-->
       <div class="form-area">
         <h3>Create Product</h3>
-        <form>
-          <label>Procuct Name</label>
-          <input type="text">
-      
-          <label>Procuct Description</label>
-          <input type="text">
-      
-          <label>Procuct Price</label>
-          <input type="text">
+        <form
+          #productsForm="ngForm"
+          (ngSubmit)="onProductCreate(productsForm.value)"
+        >
+          <label>Product Name</label>
+          <input type="text" name="pName" ngModel />
 
-          <input type="submit" value="Add Product">
+          <label>Procuct Description</label>
+          <input type="text" name="desc" ngModel />
+
+          <label>Procuct Price</label>
+          <input type="text" name="price" ngModel />
+
+          <input type="submit" value="Add Product" />
         </form>
       </div>
 
@@ -33,18 +36,32 @@
             <th>Price</th>
             <th></th>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>iPhone</td>
-            <td>iPhone Pro 11</td>
-            <td>$1299</td>
-            <td><button class="btn-delete">Delete</button></td>
+          <tr *ngIf="allProducts.length < 1 && !isFetching">
+            <td colspan="5">No Prducts Available</td>
+          </tr>
+          <tr *ngIf="isFetching">
+            <td colspan="5">Loading....</td>
+          </tr>
+          <tr *ngFor="let prod of allProducts; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ prod.pName }}</td>
+            <td>{{ prod.desc }}</td>
+            <td>{{ prod.price }}</td>
+            <td>
+              <button class="btn-delete" (click)="onDeleteProduct(prod.id)">
+                Delete
+              </button>
+            </td>
           </tr>
         </table>
-        <hr>
+        <hr />
         <div class="action-btn-container">
-          <button class="btn-fetch">Fetch Product</button>
-          <button class="btn-clear">Clear Product</button>
+          <button class="btn-fetch" (click)="onProductsFetch()">
+            Fetch Product
+          </button>
+          <button class="btn-clear" (click)="onDeleteAllProduct()">
+            Clear Product
+          </button>
         </div>
       </div>
     </div>
